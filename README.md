@@ -22,9 +22,9 @@
 
 <!-- PROJECT DESCRIPTION -->
 
-# 📖 WebPack Template <a name="about-project"></a>
+# 📖 Todo List <a name="about-project"></a>
 
-**WebPack Template** A pre built template to quickly setup a Webpack based project.
+**Todo List** A minimal website that you can add TODO's mark them complete and remove them.
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -58,8 +58,9 @@
 
 ### Key Features <a name="key-features"></a>
 
-- **Pre built**
-- **Clone and go**
+- **Beautifull UI**
+- **Easy To Use**
+- **Responsive**
 
 <p align="right"><a href="#readme-top">👆</a></p>
 
@@ -90,10 +91,11 @@ In order to run this project you need to:
 Clone the repo into your local machine:
 
 ```bash
-git clone https://github.com/BahirHakimy/WebPack-template.git
+git clone https://github.com/BahirHakimy/ToDo-List.git
 ```
 
 Install the dependencies using npm:
+
 ```bash
 npm install
 ```
@@ -101,17 +103,20 @@ npm install
 ### Usage
 
 To start the development server run
+
 ```bash
 npm start
 ```
+
 - this command will start the development server on `localhost:8080` address
 
 To create and optimized production build run
+
 ```bash
 npm run build
 ```
-- this command will create a bunduled chunks of code inside `dist/` folder
 
+- this command will create a bunduled chunks of code inside `dist/` folder
 
 <p align="right"><a href="#readme-top">👆</a></p>
 
@@ -131,7 +136,7 @@ npm run build
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- **N/A**
+- **Drag and Swap for Todos**
 
 <p align="right"><a href="#readme-top">👆</a></p>
 
