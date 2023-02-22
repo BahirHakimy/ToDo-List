@@ -2,7 +2,7 @@ function sortObjectArray(array, sortProperty = 'index') {
   return array.reduce((prev, curr) => {
     prev.push(curr);
     return prev.sort(
-      (item1, item2) => item1[sortProperty] - item2[sortProperty]
+      (item1, item2) => item1[sortProperty] - item2[sortProperty],
     );
   }, []);
 }

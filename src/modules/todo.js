@@ -135,7 +135,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      })
+      }),
     );
   }
 }
