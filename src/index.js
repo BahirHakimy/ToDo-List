@@ -12,15 +12,6 @@ function init() {
     { description: 'Fix the tv', completed: false, index: 3 },
   ];
 
-  const caption = createElement('div', {
-    class: 'caption',
-    innerHTML: `
-      <p class="title">Today's To Do</p>
-      <div class="icon">
-        <i class="fa fa-sync"></i>
-      </div>`,
-  });
-
   const form = createElement('form', {
     innerHTML: `<input
       type="text" name="todo" id="todo"
@@ -40,7 +31,7 @@ function init() {
   const todos = new Todo(tasks, list);
   todos.render();
 
-  return [caption, form, list, button];
+  return [form, list, button];
 }
 
 document.getElementById('root').append(...init());
