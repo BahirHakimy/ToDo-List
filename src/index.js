@@ -3,7 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import './style.css';
 import Todo from './modules/todo.js';
-import { createElement } from './modules/utils.js';
+import { $, createElement } from './modules/utils.js';
 
 function init() {
   const form = createElement('form', {
@@ -26,7 +26,7 @@ function init() {
   const todos = new Todo(list, form);
   todos.render();
   button.onclick = () => todos.clearCompleted();
-  form.onclick = () => todos.closeEdit();
+  $('#refresh').onclick = () => todos.refresh();
   return [form, list, button];
 }
 

@@ -116,6 +116,7 @@ form {
 
 .task > p {
   text-transform: capitalize;
+  width: 100%;
 }
 
 .todoEdit {
@@ -125,6 +126,7 @@ form {
   outline: none;
   text-transform: capitalize;
   background: transparent;
+  width: 100%;
 }
 
 #clear {

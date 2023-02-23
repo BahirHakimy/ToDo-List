@@ -10,6 +10,11 @@ export default class Todo {
     this.editIndex = -1;
   }
 
+  refresh() {
+    this.tasks = this.getFromLocalStorage();
+    this.render();
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const { todo } = event.target;
@@ -20,7 +25,7 @@ export default class Todo {
   addTask(task) {
     this.tasks.push({
       description: task,
-      index: this.tasks.length,
+      index: this.tasks.length + 1,
       completed: false,
     });
     this.saveToLocalStorage();
@@ -30,7 +35,7 @@ export default class Todo {
   removeTask(index) {
     this.tasks = this.tasks.reduce((prev, curr) => {
       if (curr.index !== index) {
-        curr.index = prev.length;
+        curr.index = prev.length + 1;
         prev.push(curr);
       }
       return prev;
@@ -40,7 +45,7 @@ export default class Todo {
   }
 
   taskStateChange({ index, completed }) {
-    this.tasks[index].completed = !completed;
+    this.tasks[index - 1].completed = !completed;
     this.saveToLocalStorage();
     this.closeEdit();
   }
@@ -56,8 +61,8 @@ export default class Todo {
   }
 
   updateTask(value) {
-    if (this.tasks[this.editIndex].description !== value) {
-      this.tasks[this.editIndex].description = value;
+    if (this.tasks[this.editIndex - 1].description !== value) {
+      this.tasks[this.editIndex - 1].description = value;
       this.saveToLocalStorage();
     }
     this.closeEdit();
@@ -75,7 +80,7 @@ export default class Todo {
   clearCompleted() {
     this.tasks = this.tasks.reduce((prev, curr) => {
       if (!curr.completed) {
-        curr.index = prev.length;
+        curr.index = prev.length + 1;
         prev.push(curr);
       }
       return prev;
@@ -90,8 +95,10 @@ export default class Todo {
     this.targetContainer.append(
       ...this.tasks.map((task) => {
         const item = createElement('li', {
-          onclick: () => this.editTask(task),
           class: this.editIndex === task.index ? 'active' : '',
+        });
+        item.addEventListener('focusout', () => {
+          this.closeEdit();
         });
         const group = createElement('div', { class: 'task' });
         const p = createElement('p', {
@@ -106,7 +113,12 @@ export default class Todo {
           defaultValue: task.description,
           autofocus: true,
           onchange: (e) => this.updateTask(e.target.value),
-          onclick: (e) => e.stopPropagation(),
+          onclick: (e) => {
+            e.stopPropagation();
+          },
+        });
+        item.addEventListener('click', () => {
+          this.editTask(task);
         });
         const iconContainer = createElement('div', {
           class: 'icon',
@@ -136,7 +148,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      }),
+      })
     );
   }
 }
