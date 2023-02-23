@@ -2,19 +2,13 @@ import '@fortawesome/fontawesome-free/js/all.js';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import './style.css';
-import { createElement } from './modules/utils.js';
 import Todo from './modules/todo.js';
+import { $, createElement } from './modules/utils.js';
 
 function init() {
-  const tasks = [
-    { description: 'Wash the car', completed: false, index: 0 },
-    { description: 'Goto to grocery store', completed: true, index: 1 },
-    { description: 'Fix the tv', completed: false, index: 3 },
-  ];
-
   const form = createElement('form', {
     innerHTML: `<input
-      type="text" name="todo" id="todo"
+        type="text" required name="todo" id="todo"
       placeholder="Add to your list..." />
       <button id="submit">
         <div class="icon">
@@ -28,9 +22,11 @@ function init() {
     id: 'clear',
     textContent: 'Clear all completed',
   });
-  const todos = new Todo(tasks, list);
-  todos.render();
 
+  const todos = new Todo(list, form);
+  todos.render();
+  button.onclick = () => todos.clearCompleted();
+  $('#refresh').onclick = () => todos.refresh();
   return [form, list, button];
 }
 

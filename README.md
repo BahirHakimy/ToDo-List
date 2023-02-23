@@ -68,7 +68,7 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- N/A
+- [Live](https://bahirhakimy.github.io/ToDo-List/)
 
 <p align="right"><a href="#readme-top">👆</a></p>
 
