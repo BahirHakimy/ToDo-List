@@ -35,6 +35,7 @@ export default class Todo {
       }
       return prev;
     }, []);
+    this.saveToLocalStorage();
     this.closeEdit();
   }
 
