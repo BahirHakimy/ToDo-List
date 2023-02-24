@@ -93,13 +93,29 @@ form {
   background-color: white;
 }
 
-#list > li {
+.items {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
   width: 100%;
   border-bottom: 1px solid var(--light);
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.dragging {
+  border: 1px solid var(--blue);
+  border-radius: 0.2rem;
+  box-shadow: 0.1rem 0.1rem 0.3rem var(--gray);
+  transform: scale(0.98);
+  z-index: 1;
+}
+
+.no-event {
+  pointer-events: none;
 }
 
 .active {
@@ -117,6 +133,7 @@ form {
 .task > p {
   text-transform: capitalize;
   width: 100%;
+  user-select: none;
 }
 
 .todoEdit {
