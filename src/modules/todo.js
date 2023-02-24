@@ -1,4 +1,4 @@
-import { createElement, $ } from './utils.js';
+import { createElement, $, sortObjectArray } from './utils.js';
 
 export default class Todo {
   LOCAL_STORAGE_KEY = 'tasks';
@@ -6,6 +6,8 @@ export default class Todo {
   constructor(targetContainer = $('ul'), form = $('form')) {
     this.tasks = this.getFromLocalStorage();
     this.targetContainer = targetContainer;
+    this.dragState = { target: null, x: 0, y: 0, dragging: false };
+    $('body').addEventListener('mousemove', (e) => this.moveTask(e));
     form.addEventListener('submit', (e) => this.handleSubmit(e));
     this.editIndex = -1;
   }
@@ -51,6 +53,7 @@ export default class Todo {
   }
 
   editTask({ index }) {
+    if (this.dragState.dragging) return;
     this.editIndex = index;
     this.render();
   }
@@ -66,6 +69,62 @@ export default class Todo {
       this.saveToLocalStorage();
     }
     this.closeEdit();
+  }
+
+  moveTask({ x, y }) {
+    if (!this.dragState.dragging) return;
+    this.dragState.target.style.top = y - this.dragState.y + 'px';
+    this.dragState.target.style.left = x - this.dragState.x + 'px';
+  }
+
+  reOrderTasks(item, index, steps, direction = 'down') {
+    if (direction === 'up') {
+      let position = index > steps ? index - steps : 1;
+      for (let i = index; i > 1; i -= 1) {
+        if (steps < 1) break;
+        this.tasks[i - 2].index = i;
+        steps -= 1;
+      }
+      this.tasks[index - 1].index = position;
+    } else {
+      let position =
+        index + steps <= this.tasks.length ? index + steps : this.tasks.length;
+      for (let i = index; i < this.tasks.length; i += 1) {
+        if (steps < 1) break;
+        this.tasks[i].index = i;
+        steps -= 1;
+      }
+      this.tasks[index - 1].index = position;
+    }
+    this.tasks = sortObjectArray(this.tasks);
+    this.saveToLocalStorage();
+  }
+
+  handleDrag({ x, y }, task, item, end = false) {
+    if (!end) {
+      if (!this.dragState.dragging) {
+        this.dragState = { target: item, dragging: true, x, y };
+        item.classList.add('dragging');
+        item.onmouseup = (e) => this.handleDrag(e, task, item, true);
+      }
+    } else {
+      if (this.dragState.dragging) {
+        const distance = y - this.dragState.y;
+        const steps = Math.floor(Math.abs(distance) / item.offsetHeight);
+        if (Math.abs(distance) > item.offsetHeight) {
+          if (distance < 0) this.reOrderTasks(item, task.index, steps, 'up');
+          else this.reOrderTasks(item, task.index, steps);
+        }
+        this.dragState = { target: null, dragging: false, x: 0, y: 0 };
+        console.log(item);
+        item.classList.add('no-event');
+        console.log(item.classList);
+        setTimeout(() => {
+          item.classList.remove('no-event');
+        }, 1000);
+        item.classList.remove('dragging');
+      }
+    }
   }
 
   saveToLocalStorage() {
@@ -90,27 +149,31 @@ export default class Todo {
     this.render();
   }
 
+  isActive(task) {
+    return this.editIndex === task.index;
+  }
+
   render() {
     this.targetContainer.innerHTML = '';
     this.targetContainer.append(
       ...this.tasks.map((task) => {
         const item = createElement('li', {
-          class: this.editIndex === task.index ? 'active' : '',
+          class: this.isActive(task) ? 'items active' : 'items',
         });
         item.addEventListener('focusout', () => {
           this.closeEdit();
         });
         const group = createElement('div', { class: 'task' });
         const p = createElement('p', {
-          class: this.editIndex === task.index ? 'hidden' : '',
+          class: this.isActive(task) ? 'hidden' : '',
           textContent: task.description,
           style: task.completed
             ? 'color: var(--light); text-decoration: line-through'
             : '',
         });
         const input = createElement('input', {
-          class: this.editIndex === task.index ? 'todoEdit' : 'hidden',
-          defaultValue: task.description,
+          class: this.isActive(task) ? 'todoEdit' : 'hidden',
+          value: task.description,
           autofocus: true,
           onchange: (e) => this.updateTask(e.target.value),
           onclick: (e) => {
@@ -122,16 +185,17 @@ export default class Todo {
         });
         const iconContainer = createElement('div', {
           class: 'icon',
-          style: this.editIndex === task.index ? 'cursor:pointer' : '',
+          style: this.isActive(task) ? 'cursor:pointer' : '',
           onclick: (e) => {
             e.stopPropagation();
-            if (this.editIndex === task.index) this.removeTask(task.index);
+            if (this.isActive(task)) this.removeTask(task.index);
+          },
+          onmousedown: (e) => {
+            !this.isActive(task) && this.handleDrag(e, task, item);
           },
         });
         const icon = createElement('i', {
-          class: `fa fa-${
-            this.editIndex === task.index ? 'trash' : 'ellipsis-vertical'
-          }`,
+          class: `fa fa-${this.isActive(task) ? 'trash' : 'ellipsis-vertical'}`,
         });
         const checkIcon = createElement('div', {
           class: 'icon',
@@ -148,7 +212,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      }),
+      })
     );
   }
 }
