@@ -116,9 +116,7 @@ export default class Todo {
           else this.reOrderTasks(item, task.index, steps);
         }
         this.dragState = { target: null, dragging: false, x: 0, y: 0 };
-        console.log(item);
         item.classList.add('no-event');
-        console.log(item.classList);
         setTimeout(() => {
           item.classList.remove('no-event');
         }, 1000);
@@ -158,12 +156,12 @@ export default class Todo {
     this.targetContainer.append(
       ...this.tasks.map((task) => {
         const item = createElement('li', {
-          class: this.isActive(task) ? 'items active' : 'items',
+          class: this.isActive(task) ? 'flex items active' : 'flex items',
         });
         item.addEventListener('focusout', () => {
           this.closeEdit();
         });
-        const group = createElement('div', { class: 'task' });
+        const group = createElement('div', { class: 'flex task' });
         const p = createElement('p', {
           class: this.isActive(task) ? 'hidden' : '',
           textContent: task.description,
