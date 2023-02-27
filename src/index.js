@@ -7,6 +7,7 @@ import { $, createElement } from './modules/utils.js';
 
 function init() {
   const form = createElement('form', {
+    class: 'flex',
     innerHTML: `<input
         type="text" required name="todo" id="todo"
       placeholder="Add to your list..." />
@@ -17,7 +18,7 @@ function init() {
       </button>`,
   });
 
-  const list = createElement('ul', { id: 'list' });
+  const list = createElement('ul', { id: 'list', class: 'flex' });
   const button = createElement('button', {
     id: 'clear',
     textContent: 'Clear all completed',
