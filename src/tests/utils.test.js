@@ -1,4 +1,4 @@
-import { sortObjectArray } from '../modules/utils';
+import { sortObjectArray } from '../modules/utils.js';
 
 const objArray = [
   { order: 2 },
