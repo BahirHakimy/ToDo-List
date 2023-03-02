@@ -140,3 +140,60 @@ describe('Todo Update Items Completed Functionality', () => {
     );
   });
 });
+
+describe('Todo clear completed Items Functionality', () => {
+	beforeEach(() => {
+		todo.tasks = [];
+	});
+
+	test('Clear all completed tasks should remove all completed tasks from the tasks array', () => {
+		const task1 = 'Task 1 complete';
+		todo.addTask(task1);
+		const task2 = 'Task 2 undone task';
+		todo.addTask(task2);
+		const task3 = 'Task 3 complete';
+		todo.addTask(task3);
+		
+		todo.tasks.forEach(element => {
+			if(element.description.match(/complete/)){
+				todo.taskStateChange(element);
+			}
+		});
+		expect(todo.tasks.length).toBe(3);
+		todo.clearCompleted();
+
+		todo.tasks.forEach(element => {
+			expect(element.completed).toBeFalsy();
+		});
+		expect(todo.tasks.length).toBe(1);
+
+	});
+
+	test('Clear all completed tasks should remove all completed tasks from the DOM', () => {
+		const task1 = 'Task 1 complete';
+		todo.addTask(task1);
+		const task2 = 'Task 2 undone task';
+		todo.addTask(task2);
+		const task3 = 'Task 3 complete';
+		todo.addTask(task3);
+
+		todo.tasks.forEach(element => {
+			if (element.description.match(/complete/)) {
+				todo.taskStateChange(element);
+			}
+		});
+		expect(document.querySelector('ul').children.length).toBe(3);
+		todo.clearCompleted();
+		
+		Array.from(document.querySelector('ul').children)
+		.forEach(element => {
+			expect(element.querySelector('i').classList).toContain('fa-square');
+			expect(element.querySelector('p').style.textDecoration).not.toBe(
+				'line-through'
+			);
+		});
+		expect(todo.tasks.length).toBe(1);
+
+	});
+
+});
