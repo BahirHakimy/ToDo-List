@@ -6,7 +6,12 @@ export default class Todo {
   constructor(targetContainer = $('ul'), form = $('form')) {
     this.tasks = this.getFromLocalStorage();
     this.targetContainer = targetContainer;
-    this.dragState = { target: null, x: 0, y: 0, dragging: false };
+    this.dragState = {
+      target: null,
+      x: 0,
+      y: 0,
+      dragging: false,
+    };
     $('body').addEventListener('mousemove', (e) => this.moveTask(e));
     form.addEventListener('submit', (e) => this.handleSubmit(e));
     this.editIndex = -1;
@@ -73,13 +78,13 @@ export default class Todo {
 
   moveTask({ x, y }) {
     if (!this.dragState.dragging) return;
-    this.dragState.target.style.top = y - this.dragState.y + 'px';
-    this.dragState.target.style.left = x - this.dragState.x + 'px';
+    this.dragState.target.style.top = `${y - this.dragState.y}px`;
+    this.dragState.target.style.left = `${x - this.dragState.x}px`;
   }
 
   reOrderTasks(item, index, steps, direction = 'down') {
     if (direction === 'up') {
-      let position = index > steps ? index - steps : 1;
+      const position = index > steps ? index - steps : 1;
       for (let i = index; i > 1; i -= 1) {
         if (steps < 1) break;
         this.tasks[i - 2].index = i;
@@ -87,8 +92,7 @@ export default class Todo {
       }
       this.tasks[index - 1].index = position;
     } else {
-      let position =
-        index + steps <= this.tasks.length ? index + steps : this.tasks.length;
+      const position = index + steps <= this.tasks.length ? index + steps : this.tasks.length;
       for (let i = index; i < this.tasks.length; i += 1) {
         if (steps < 1) break;
         this.tasks[i].index = i;
@@ -103,25 +107,33 @@ export default class Todo {
   handleDrag({ x, y }, task, item, end = false) {
     if (!end) {
       if (!this.dragState.dragging) {
-        this.dragState = { target: item, dragging: true, x, y };
+        this.dragState = {
+          target: item,
+          dragging: true,
+          x,
+          y,
+        };
         item.classList.add('dragging');
         item.onmouseup = (e) => this.handleDrag(e, task, item, true);
       }
-    } else {
-      if (this.dragState.dragging) {
-        const distance = y - this.dragState.y;
-        const steps = Math.floor(Math.abs(distance) / item.offsetHeight);
-        if (Math.abs(distance) > item.offsetHeight) {
-          if (distance < 0) this.reOrderTasks(item, task.index, steps, 'up');
-          else this.reOrderTasks(item, task.index, steps);
-        }
-        this.dragState = { target: null, dragging: false, x: 0, y: 0 };
-        item.classList.add('no-event');
-        setTimeout(() => {
-          item.classList.remove('no-event');
-        }, 1000);
-        item.classList.remove('dragging');
+    } else if (this.dragState.dragging) {
+      const distance = y - this.dragState.y;
+      const steps = Math.floor(Math.abs(distance) / item.offsetHeight);
+      if (Math.abs(distance) > item.offsetHeight) {
+        if (distance < 0) this.reOrderTasks(item, task.index, steps, 'up');
+        else this.reOrderTasks(item, task.index, steps);
       }
+      this.dragState = {
+        target: null,
+        dragging: false,
+        x: 0,
+        y: 0,
+      };
+      item.classList.add('no-event');
+      setTimeout(() => {
+        item.classList.remove('no-event');
+      }, 1000);
+      item.classList.remove('dragging');
     }
   }
 
@@ -189,7 +201,7 @@ export default class Todo {
             if (this.isActive(task)) this.removeTask(task.index);
           },
           onmousedown: (e) => {
-            !this.isActive(task) && this.handleDrag(e, task, item);
+            if (!this.isActive(task)) this.handleDrag(e, task, item);
           },
         });
         const icon = createElement('i', {
@@ -210,7 +222,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      })
+      }),
     );
   }
 }
