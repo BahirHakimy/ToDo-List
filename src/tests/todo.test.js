@@ -14,9 +14,10 @@ const init = () => {
 // beforeEach = () => {
 //   document.body.innerHTML = '';
 // };
+const todo = init();
 
 describe('Todo Add Functionality', () => {
-  const todo = init();
+
 
   beforeEach(() => {
     todo.tasks = [];
@@ -53,5 +54,44 @@ describe('Todo Add Functionality', () => {
 });
 
 describe('Todo Remove Functionality', () => {
-  test('test', () => {});
+ 
+	//const todo = init();
+
+
+	beforeEach(() => {
+		todo.tasks = [];
+	});
+
+	test('removeTask works correctly and the task is removed from the tasks array', () => {
+		todo.addTask('Task1');
+		const task = todo.tasks[0];
+		expect(todo.tasks.length).toBe(1);
+		todo.removeTask(task.index);
+		expect(todo.tasks.length).toBe(0);
+	});
+
+	test('Removed task should be removed from local storage', () => {
+		const taskTitle = 'Task storage';
+		todo.addTask(taskTitle);
+		const task = todo.tasks[0];
+		expect(localStorage.getItem(todo.LOCAL_STORAGE_KEY)).toBeDefined();
+		expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
+			todo.tasks
+		);
+		todo.removeTask(task.index);
+		expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
+			[]
+		);
+	});
+
+	test('The right li is removed from the dom', () => {
+		const taskTitle = 'Task 1 list item';
+		todo.addTask(taskTitle);
+		const task = todo.tasks[0];
+		expect(document.querySelector('li').innerHTML).toContain(taskTitle);
+		expect(document.querySelector('ul').children.length).toBe(1);
+		todo.removeTask(task.index);
+		expect(document.querySelector('ul').children.length).toBe(0);
+	});
+
 });
