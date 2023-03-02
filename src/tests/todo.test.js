@@ -4,7 +4,7 @@ const init = () => {
   const target = document.createElement('ul');
   document.body.insertAdjacentHTML(
     'afterbegin',
-    '<form><button type="submit"></button></form>',
+    '<form><button type="submit"></button></form>'
   );
   document.body.appendChild(target);
   const todo = new Todo(target);
@@ -36,7 +36,7 @@ describe('Todo Add Functionality', () => {
     todo.addTask(taskTitle);
     expect(localStorage.getItem(todo.LOCAL_STORAGE_KEY)).toBeDefined();
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      todo.tasks,
+      todo.tasks
     );
   });
 
@@ -67,11 +67,11 @@ describe('Todo Remove Functionality', () => {
     const task = todo.tasks[0];
     expect(localStorage.getItem(todo.LOCAL_STORAGE_KEY)).toBeDefined();
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      todo.tasks,
+      todo.tasks
     );
     todo.removeTask(task.index);
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      [],
+      []
     );
   });
 
@@ -83,5 +83,60 @@ describe('Todo Remove Functionality', () => {
     expect(document.querySelector('ul').children.length).toBe(1);
     todo.removeTask(task.index);
     expect(document.querySelector('ul').children.length).toBe(0);
+  });
+});
+
+describe('Todo Edit Functionality', () => {
+  beforeEach(() => {
+    todo.tasks = [];
+  });
+
+  test('updateTask works correctly and todo content should be the updated content', () => {
+    const originalTask = 'Task before update';
+    const updatedTask = 'Task after update';
+    todo.addTask(originalTask);
+    const task = todo.tasks[0];
+    expect(task.description).toBe(originalTask);
+    todo.editIndex = task.index;
+    todo.updateTask(updatedTask);
+    expect(task.description).toBe(updatedTask);
+  });
+
+  test('The li with the updated content should be rendered', () => {
+    const originalTask = 'Task content before update';
+    const updatedTask = 'Task content after update';
+    todo.addTask(originalTask);
+    expect(document.querySelector('li p').innerHTML).toContain(originalTask);
+    const task = todo.tasks[0];
+    todo.editIndex = task.index;
+    todo.updateTask(updatedTask);
+    expect(document.querySelector('li p').innerHTML).toContain(updatedTask);
+  });
+});
+
+describe('Todo Update Items Completed Functionality', () => {
+  beforeEach(() => {
+    todo.tasks = [];
+  });
+
+  test('Update state works correctly and the task state is updated', () => {
+    const task1 = 'Task incomplete';
+    todo.addTask(task1);
+    const task = todo.tasks[0];
+    expect(task.completed).toBeFalsy();
+    todo.taskStateChange(task);
+    expect(task.completed).toBeTruthy();
+  });
+
+  test('Update state of the task is rendered correctly in the DOM', () => {
+    const task1 = 'Task incomplete';
+    todo.addTask(task1);
+    const task = todo.tasks[0];
+    expect(document.querySelector('li i').classList).toContain('fa-square');
+    todo.taskStateChange(task);
+    expect(document.querySelector('li i').classList).toContain('fa-check');
+    expect(document.querySelector('li p').style.textDecoration).toBe(
+      'line-through'
+    );
   });
 });
