@@ -4,7 +4,7 @@ const init = () => {
   const target = document.createElement('ul');
   document.body.insertAdjacentHTML(
     'afterbegin',
-    '<form><button type="submit"></button></form>'
+    '<form><button type="submit"></button></form>',
   );
   document.body.appendChild(target);
   const todo = new Todo(target);
@@ -36,7 +36,7 @@ describe('Todo Add Functionality', () => {
     todo.addTask(taskTitle);
     expect(localStorage.getItem(todo.LOCAL_STORAGE_KEY)).toBeDefined();
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      todo.tasks
+      todo.tasks,
     );
   });
 
@@ -67,11 +67,11 @@ describe('Todo Remove Functionality', () => {
     const task = todo.tasks[0];
     expect(localStorage.getItem(todo.LOCAL_STORAGE_KEY)).toBeDefined();
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      todo.tasks
+      todo.tasks,
     );
     todo.removeTask(task.index);
     expect(JSON.parse(localStorage.getItem(todo.LOCAL_STORAGE_KEY))).toEqual(
-      []
+      [],
     );
   });
 
@@ -136,7 +136,7 @@ describe('Todo Update Items Completed Functionality', () => {
     todo.taskStateChange(task);
     expect(document.querySelector('li i').classList).toContain('fa-check');
     expect(document.querySelector('li p').style.textDecoration).toBe(
-      'line-through'
+      'line-through',
     );
   });
 });
@@ -187,7 +187,7 @@ describe('Todo clear completed Items Functionality', () => {
     Array.from(document.querySelector('ul').children).forEach((element) => {
       expect(element.querySelector('i').classList).toContain('fa-square');
       expect(element.querySelector('p').style.textDecoration).not.toBe(
-        'line-through'
+        'line-through',
       );
     });
     expect(todo.tasks.length).toBe(1);
