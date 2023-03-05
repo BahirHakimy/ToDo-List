@@ -76,12 +76,14 @@ export default class Todo {
     this.closeEdit();
   }
 
+  // Moves the tasks when user is dragging the tasks
   moveTask({ x, y }) {
     if (!this.dragState.dragging) return;
     this.dragState.target.style.top = `${y - this.dragState.y}px`;
     this.dragState.target.style.left = `${x - this.dragState.x}px`;
   }
 
+  // Reorders the tasks based on given steps and direction
   reOrderTasks(item, index, steps, direction = 'down') {
     if (direction === 'up') {
       const position = index > steps ? index - steps : 1;
@@ -92,7 +94,8 @@ export default class Todo {
       }
       this.tasks[index - 1].index = position;
     } else {
-      const position = index + steps <= this.tasks.length ? index + steps : this.tasks.length;
+      const position =
+        index + steps <= this.tasks.length ? index + steps : this.tasks.length;
       for (let i = index; i < this.tasks.length; i += 1) {
         if (steps < 1) break;
         this.tasks[i].index = i;
@@ -104,6 +107,7 @@ export default class Todo {
     this.saveToLocalStorage();
   }
 
+  // Initializes the drag state and sets the initial position of mouse x and y
   handleDrag({ x, y }, task, item, end = false) {
     if (!end) {
       if (!this.dragState.dragging) {
@@ -159,6 +163,7 @@ export default class Todo {
     this.render();
   }
 
+  // Check if current item is in Edit mode
   isActive(task) {
     return this.editIndex === task.index;
   }
@@ -222,7 +227,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      }),
+      })
     );
   }
 }
