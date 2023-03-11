@@ -4,6 +4,7 @@
   --smoke: #f5f5f5;
   --blue: #00aeff;
   --highlight: #ffff0269;
+  --dark-slate: #0d0c2c;
 }
 
 * {
@@ -21,7 +22,7 @@
 
 body {
   height: 100vh;
-  background-color: var(--smoke);
+  background-image: url(./assets/background.svg);
 }
 
 .hidden {
@@ -34,19 +35,21 @@ body {
   border-radius: 0.1rem;
   width: 30rem;
   box-shadow: 0.1rem 0.1rem 0.5rem var(--gray);
-  background-color: var(--smoke);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(5px);
 }
 
 .caption {
+  border-radius: 0.5rem;
   justify-content: space-between;
   width: 100%;
   border-bottom: 1px solid var(--light);
   padding: 1rem;
-  background-color: white;
+  backdrop-filter: blur(5px);
 }
 
 .icon {
-  color: var(--gray);
+  color: var(--smoke);
 }
 
 li > .icon:hover {
@@ -61,7 +64,7 @@ form {
   width: 100%;
   border-bottom: 1px solid var(--light);
   padding: 0.5rem 1rem;
-  background-color: white;
+  backdrop-filter: blur(5px);
 }
 
 #todo {
@@ -69,20 +72,33 @@ form {
   border: none;
   outline: none;
   font-size: inherit;
+  background-color: #4448;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  color: var(--smoke);
+}
+
+#todo::placeholder {
+  color: var(--smoke);
 }
 
 #submit {
   width: 10%;
+  font-size: inherit;
   border: none;
   padding: 0.5rem 0;
   border-radius: 0.1rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  color: white;
+  background-color: #5558;
 }
 
 #list {
   position: relative;
   flex-direction: column;
   width: 100%;
-  background-color: white;
 }
 
 .items {
