@@ -1,9 +1,26 @@
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 0.3rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0.5rem;
+  background-color: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--light);
+}
+
 :root {
   --gray: #222;
-  --light: #aaa;
+  --light: #aaaaaa67;
+  --dark: #0008;
   --smoke: #f5f5f5;
   --blue: #00aeff;
-  --highlight: #ffff0269;
+  --green: #15ff00;
+  --light-blue: #075fffc4;
+  --highlight: #0230ff69;
   --dark-slate: #0d0c2c;
 }
 
@@ -56,6 +73,15 @@ li > .icon:hover {
   cursor: move;
 }
 
+.check {
+  color: var(--green);
+  filter: drop-shadow(0 0.05rem 0.05rem var(--gray));
+}
+
+.square {
+  color: var(--light-blue);
+}
+
 .title {
   color: var(--gray);
 }
@@ -99,6 +125,8 @@ form {
   position: relative;
   flex-direction: column;
   width: 100%;
+  max-height: 60vh;
+  overflow: hidden auto;
 }
 
 .items {
@@ -117,15 +145,17 @@ form {
   border-radius: 0.2rem;
   box-shadow: 0.1rem 0.1rem 0.3rem var(--gray);
   transform: scale(0.98);
+  backdrop-filter: blur(10px);
   z-index: 1;
-}
-
-.no-event {
-  pointer-events: none;
 }
 
 .active {
   background: var(--highlight);
+  color: white;
+}
+
+.active input {
+  color: var(--smoke);
 }
 
 .task {
@@ -151,13 +181,15 @@ form {
 
 #clear {
   font-size: inherit;
-  color: var(--light);
+  color: var(--smoke);
   border: none;
   font-weight: 300;
   margin: 1rem auto;
+  background: transparent;
+  user-select: none;
 }
 
 #clear:hover {
   text-decoration: underline;
-  color: var(--gray);
+  color: var(--dark-slate);
 }

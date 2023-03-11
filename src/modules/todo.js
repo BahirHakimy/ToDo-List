@@ -94,7 +94,8 @@ export default class Todo {
       }
       this.tasks[index - 1].index = position;
     } else {
-      const position = index + steps <= this.tasks.length ? index + steps : this.tasks.length;
+      const position =
+        index + steps <= this.tasks.length ? index + steps : this.tasks.length;
       for (let i = index; i < this.tasks.length; i += 1) {
         if (steps < 1) break;
         this.tasks[i].index = i;
@@ -182,7 +183,7 @@ export default class Todo {
           class: this.isActive(task) ? 'hidden' : '',
           textContent: task.description,
           style: task.completed
-            ? 'color: var(--light); text-decoration: line-through'
+            ? 'color: var(--dark); text-decoration: line-through'
             : '',
         });
         const input = createElement('input', {
@@ -212,8 +213,7 @@ export default class Todo {
           class: `fa fa-${this.isActive(task) ? 'trash' : 'ellipsis-vertical'}`,
         });
         const checkIcon = createElement('div', {
-          class: 'icon',
-          style: `color:var(${task.completed ? '--blue' : '--light'})`,
+          class: `icon ${task.completed ? 'check' : 'square'}`,
           innerHTML: `<i class="fa fa-${
             task.completed ? 'check' : 'square far'
           }"></i>`,
@@ -226,7 +226,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      }),
+      })
     );
   }
 }
