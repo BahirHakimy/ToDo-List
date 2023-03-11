@@ -94,8 +94,7 @@ export default class Todo {
       }
       this.tasks[index - 1].index = position;
     } else {
-      const position =
-        index + steps <= this.tasks.length ? index + steps : this.tasks.length;
+      const position = index + steps <= this.tasks.length ? index + steps : this.tasks.length;
       for (let i = index; i < this.tasks.length; i += 1) {
         if (steps < 1) break;
         this.tasks[i].index = i;
@@ -226,7 +225,7 @@ export default class Todo {
         group.append(checkIcon, input, p);
         item.append(group, iconContainer);
         return item;
-      })
+      }),
     );
   }
 }
